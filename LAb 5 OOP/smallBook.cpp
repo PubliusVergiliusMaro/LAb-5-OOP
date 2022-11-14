@@ -11,3 +11,6 @@ int smallBook::getI() { return i; }
 smallBook::smallBook() {
 	cout << "Class BigBook:" << endl;
 };
+smallBook::~smallBook() {
+
+}

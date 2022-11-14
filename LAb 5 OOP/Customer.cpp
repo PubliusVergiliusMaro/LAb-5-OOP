@@ -66,7 +66,7 @@ Customer::Customer(string name, string surname, string patro, string nation, int
 }
 Customer::~Customer()
 {
-	cout << "Kill "<<getName() << endl;
+	cout << "Goodbye "<<getName() << endl;
 }
 void Customer::saveToFile() {
 

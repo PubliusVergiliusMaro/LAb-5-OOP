@@ -4,7 +4,7 @@
 #include <fstream>
 #include <time.h>
 #include <cstdlib>
-
+#include <vector>
 
 using namespace std;
 
@@ -39,6 +39,8 @@ public:
 	string patronymic_human;
 
 	void setNation(string nation);
+
+	
 
 	string  getName();
 	string getSurname();
@@ -85,6 +87,14 @@ class Books :public LibraryBooks {
 
 public:
 	friend void changeSize(Books& value);
+    
+	
+	template <typename T> T getSum(T data,T addNumber) {
+		return data+addNumber;
+	}
+
+
+
 
 	void setBook(string nameBook);
 	void setBook(string nameBook, string author);
@@ -158,6 +168,7 @@ private:
 	string publisher;
 	string Name;
 public:
+	
 	BookPackage(string name);
 	void display();
 	~BookPackage();
@@ -169,10 +180,47 @@ class Customer : public virtual Human {
 
 private:
 
-
+	Customer* arr;
 public:
 
-	int random;
+	Customer& operator++() {
+		++age_human;
+		return *this;
+	};
+	Customer operator--(int) {
+		Customer temp = *this;
+		--age_human;
+		return temp;
+	};
+	Customer operator + (Customer &B) {
+		Customer A;
+		A.age_human = age_human + B.age_human;
+		return (A);
+	}
+	
+	Customer operator - (Customer &B) {
+		Customer A;
+		A.age_human = age_human - B.age_human;
+
+		A.year_human = year_human - B.year_human;
+		return (A);
+	}
+	Customer& operator += (Customer c2)
+	{
+		age_human += c2.age_human;
+		return *this;
+	}
+	Customer& operator[](const int index) {
+		return arr[index];
+	}
+
+
+	friend bool operator== ( Customer& c1,  Customer& c2);
+	friend bool operator!= ( Customer& c1,  Customer& c2);
+	
+
+
+
 	void setName(string name);
 	void setName(string name, string surname);
 	void setName(string name, string surname, string patronymic);
@@ -282,9 +330,11 @@ public:
 
 	~Librarian()override;
 };
+
 class Catalog {// Agregation
 private:
 	Books* book;
+	
 	string name_catalog;
 public:
 
@@ -304,15 +354,55 @@ public:
 	void giveBook();
 	~Library();
 };//Association
+
+
+
+template <class T> class MyClass
+{
+public:
+	
+	MyClass(T value, T value2 , T value3,T value4) {
+		value_one = value;
+		value_two = value2;
+		value_three = value3;
+		value_four = value4;
+	}
+	void changeData() {
+		cout << " Entered numbers =" << value_one << "," 
+			<< value_two << "," << value_three << "," << value_four  << ".  After manipulations we get = " <<
+			value_one + value_four + value_three + value_two << endl;
+		
+	}
+	
+	MyClass(T obj) {
+		object = obj;
+	}
+	void getSize() {
+		cout << "Size of object is :" << sizeof(object)<< " bytes" << endl;
+	}
+private:
+	T object;
+	T value_one;
+	T value_two;
+	T value_three;
+	T value_four;
+};
+
+
 class smallBook : protected Books {// task 
 protected:
 	int i = 5;
+
 public:
+	
 	int getI();
 	smallBook();
+	~smallBook();
 };
 
 class BigBook : protected smallBook {// task 9
+
+
 public:
 	
 	void setData(string name, string author, string publisher, int year, int circulation, string genre, int serialnum, int size);
@@ -321,6 +411,9 @@ public:
 	void showData();
 	~BigBook();
 };
+
+
+
 class YoungCustomer :public Customer {///task 10-11
 public:
 	YoungCustomer(string name, string surname, string patron, string nation);
@@ -337,7 +430,9 @@ public:
 
 class RegularCustomer :public YoungCustomer, public OldCustomer {
 public:
+
 	RegularCustomer(string name, string surname, string patronymic, string nation, int age, int phone, int year, int id);
+	
 	void display();
 	void myTask();
 	~RegularCustomer();
@@ -350,4 +445,138 @@ public:
 class chiefLibrarian : public virtual Human {//task 17
 public:
 	void speak(Librarian& l); void myTask()override;
+};
+
+
+///    /// 
+///4.1 /// додавання (plus), віднімання (addition), множення (times),
+///    ///  ділення(divides), взяття залишку (modulus) та зміна знаку (negate).
+class Func_Plus
+{
+
+public:
+	int operator () (int x, int y){
+		return x + y;
+	}
+};
+class Func_minus
+{
+
+public:
+	int operator () (int x, int y) {
+		return x - y;
+	}
+};
+class Func_multiplication
+{
+
+public:
+	int operator () (int x, int y) {
+		return x * y;
+	}
+};
+class Func_divides
+{
+
+public:
+	int operator () (int x, int y)  {
+		return x / y;
+	}
+};
+class Func_module
+{
+
+public:
+	int operator () (int x, int y)  {
+		return x % y;
+	}
+};
+class Func_negative
+{
+
+public:
+	int operator () (int x)  {
+		return -x;
+	}
+};
+///    /// 
+///    /// функціональні об'єкти для обчислення рівності (equal_to), нерівності (not_equal_to), 
+///4.2 /// операції "більше" (greater), операції "менше" (less), операції "більше або дорівнює" 
+///    /// (greater_equal), операції "менше або дорівнює" (less_equal) . 
+///    /// 
+class Func_equalTo
+{
+
+public:
+	bool operator () (int x, int y){
+		return x == y;
+	}
+};
+class Func_notEqualTo
+{
+
+public:
+	bool operator () (int x, int y){
+		return x != y;
+	}
+};
+class Func_bigger
+{
+
+public:
+	bool operator () (int x, int y){
+		return x > y;
+	}
+};
+class Func_less
+{
+
+public:
+	bool operator () (int x, int y){
+		return x < y;
+	}
+};
+class Func_biggerEqual
+{
+
+public:
+	bool operator () (int x, int y){
+		return x >= y;
+	}
+};
+class Func_lessEqual
+{
+
+public:
+	bool operator () (int x, int y){
+		return x <= y;
+	}
+};
+///    ///
+/// 4.3/// функціональні об'єкти: логічне "і" (logical_and), логічне "або" (logical_or)
+///    ///  і логічне "не" (logical_not)
+///    ///
+class Func_logicalAnd
+{
+
+public:
+	bool operator () (bool x, bool y){
+		return x && y;
+	}
+};
+class Func_logicalOr
+{
+
+public:
+	bool operator () (bool x, bool y){
+		return x || y;
+	}
+};
+class Func_LogicalNot
+{
+
+public:
+	bool operator () (bool x){
+		return !x;
+	}
 };
